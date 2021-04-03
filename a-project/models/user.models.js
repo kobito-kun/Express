@@ -3,3 +3,5 @@ const userSchema = new Schema({
     email: String,
     password: String
 })
+
+const userModel = mongoose.models("Users", )
