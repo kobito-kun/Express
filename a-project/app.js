@@ -1,34 +1,20 @@
 const express = require('express');
 const bodyparser = require('body-parser');
+const mongoose = require('mongoose');
+require("dotenv/config")
+mongoose.connect(process.env.DB_CONNECTION, {useNewUrlParser: true, useUnifiedTopology: true},  () => console.log("DB Connected."))
 
-const sampledata = require('./sample.json')
+const todos = require('./todos');
 
 const app = express();
 const port = 8000;
 
+
 app.use(bodyparser.urlencoded({extended:false}))
 app.use(bodyparser.json())
+app.use('/todos', todos)
 
-app.get("/", (req, res) => {
-    res.send("Henlo")
-})
-
-app.get("/todos/", (req, res) => {
-    res.json(sampledata)
-})
-
-app.get("/todo/:id", (req, res) => {
-    var filtered = sampledata.filter(e => e.id == req.params.id)
-    res.json(filtered)
-})
-
-app.put("/todo/", (req, res) => {
-
-    // Add todo here
-
-    res.send("Item successfully saved.");
-})
 
 app.listen(port, () => {
-    console.log(`Listenning at port ${port}`)
+    console.log(`Listening at port ${port}`)
 })
