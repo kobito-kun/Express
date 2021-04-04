@@ -8,6 +8,10 @@ const Todo = new Schema({
         type: Date,
         default: Date.now,
     },
+    complete: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 module.exports.Todo = mongoose.model('Todo', Todo);
