@@ -27,10 +27,10 @@ function AddInput({todos, setTodos}) {
     }
 
     return (
-        <div>
-            <input value={inputTitle} onChange={setTheInputTitleLmao} />
-            <input value={inputContent} onChange={setTheInputContentLmao} />
-            <button onClick={addTodo}>Add</button>
+        <div className="bg-blue-200 p-4 rounded-lg">
+            <input className="border-2 border-blue-400 py-2 px-4 focus:outline-none focus:ring-1 focus:ring-purple-400 rounded-lg bg-transparent rounded m-1" placeholder="Title" value={inputTitle} onChange={setTheInputTitleLmao} />
+            <input className="border-2 border-blue-400 py-2 px-4 focus:outline-none focus:ring-1 focus:ring-purple-400 rounded-lg bg-transparent rounded m-1" placeholder="Content" value={inputContent} onChange={setTheInputContentLmao} />
+            <button className="text-white font-bold bg-blue-400 border-blue-400 border-2 py-2 px-4 rounded-lg shadow" onClick={addTodo}>Add</button>
         </div>
     )
 }
