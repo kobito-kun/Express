@@ -8,10 +8,6 @@ const Todo = new Schema({
         type: Date,
         default: Date.now,
     },
-    user: {
-        type: String,
-        required: true,
-    },
     complete: {
         type: Boolean,
         default: false,

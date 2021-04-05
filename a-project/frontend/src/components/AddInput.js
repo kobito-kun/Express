@@ -13,10 +13,10 @@ function AddInput({todos, setTodos}) {
         setInputContent(e.target.value)
     }
     
-    async function addTodo(){
-        await axios.put("http://localhost:8000/todos/", {
-            "title": inputTitle,
-            "content": inputContent
+    function addTodo(){
+        axios.put("http://localhost:8000/todos/", {
+            title: inputTitle,
+            content: inputContent
         }).then(e => {
             const newTodos = [...todos, e.data]
             setTodos(newTodos)

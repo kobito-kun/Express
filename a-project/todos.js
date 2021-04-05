@@ -39,6 +39,7 @@ router.patch("/:id", async (req, res) => {
 
 
 router.put("/", (req, res) => {
+    console.log("I got a put")
     var title = req.body.title
     var content = req.body.content
     const newTodo = new Todo({
