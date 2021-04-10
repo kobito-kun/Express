@@ -1,0 +1,99 @@
+<html>
+  
+<head>
+  <title>Real Time Polling System</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.1.1/tailwind.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />  
+</head>
+
+<body>
+  <div class="min-h-screen bg-gradient-to-br from-blue-300 p-10 to-blue-600 flex items-center justify-center">
+    <div class="bg-white p-10 rounded-lg shadow-lg" style="max-width: 500px; min-width: 500px;">
+      <h1 class="font-bold text-4xl text-center">Real Time Polling</h1>
+      <h3 class="font-semibold text-lg text-center">Total Votes: <span class="font-bold" id="total-votes"></span></h3>
+      <h3 class="font-semibold text-center">By Kobi <a href="https://github.com/kobito-kun"><i class="fab fa-github"></i></a></h3>
+      <div class="grid lg:grid-cols-3">
+        <div class="m-2 p-2">
+          <img class="w-40 p-2 block mx-auto " src="https://kobi.lol/media/javascript_tp9gyze.svg" alt="Javascript">
+          <button onClick="increment('js')" class="block mx-auto py-2 px-4 bg-blue-500 rounded shadow font-bold text-white">Votes: <span id="js-votes">0</span></button>
+        </div>
+        <div class="m-2 p-2">
+          <img class="w-40 p-2 block mx-auto " src="https://kobi.lol/media/python_uIZOfPd.svg" alt="Python">
+          <button onClick="increment('py')" class="block mx-auto py-2 px-4 bg-blue-500 rounded shadow font-bold text-white">Votes: <span id="py-votes">0</span></button>
+        </div>
+        <div class="m-2 p-2">
+          <img class="w-40 p-2 block mx-auto " src="https://kobi.lol/media/clojure-1_uQ8brRy.svg" alt="Clojure">
+          <button onClick="increment('cj')" class="block mx-auto py-2 px-4 bg-blue-500 rounded shadow font-bold text-white">Votes: <span id="cj-votes">0</span></button>
+        </div>
+      </div>
+      <div class="text-center">
+        <canvas id="myChart" style="width: 300px;"></canvas>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.0.2/dist/chart.min.js"></script>
+<script>
+  const socket = io();
+
+  var countpy = 0;
+  var countjs = 0;
+  var countcj = 0
+
+  var ctx, myChart, total;
+
+  socket.on('information', r => {
+    const python = document.getElementById("py-votes").innerHTML = r['python'];
+    countpy = r['python']
+    const clojure = document.getElementById("cj-votes").innerHTML = r['clojure'];
+    countcj = r['clojure']
+    const javascript = document.getElementById("js-votes").innerHTML = r['javascript'];
+    countjs = r['javascript']
+
+    document.getElementById("total-votes").innerHTML = String(countpy + countjs + countcj)
+
+      ctx = document.getElementById('myChart').getContext('2d');
+      total = countjs + countcj + countpy
+      myChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+          labels: ["JavaScript", "Python", "Clojure"],
+          datasets: [{
+              label: "# Total Votes",
+              data: [countjs, countpy, countcj],
+              backgroundColor: [
+                  'rgba(255, 99, 132, 0.2)',
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(255, 206, 86, 0.2)',
+              ],
+              borderColor: [
+                  'rgba(255, 99, 132, 1)',
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(255, 206, 86, 1)',
+              ],
+              borderWidth: 1
+          }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false},
+  });
+  })
+
+  function increment(arg){
+    if(arg == 'js'){
+      socket.emit('poll', 'js')
+    }else if(arg == 'py'){
+      socket.emit('poll', 'py')
+    }else if(arg == 'cj'){
+      socket.emit('poll', 'cj')
+    }else{
+      console.log("hi")
+    }
+    myChart.data.datasets[0].data = [countjs, countpy, countcj]
+    myChart.update()    
+  }
+
+</script>
+</html>
